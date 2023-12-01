@@ -7,16 +7,37 @@ import {
 } from "@expo-google-fonts/inter";
 import { Controller, useForm } from "react-hook-form";
 import { Link } from "expo-router";
+import axios from "axios";
+import { useState } from "react";
 
 type FormData = {
   name: string;
 };
+
+class User {
+  public name: string;
+  public login: string;
+  public avatar_url: string;
+  public location: string;
+  constructor(
+    name: string,
+    login: string,
+    avatar_url: string,
+    location: string
+  ) {
+    this.name = name ?? "Dado não existente";
+    this.login = login ?? "Dado não existente";
+    this.avatar_url = avatar_url ?? "Sem foto";
+    this.location = location ?? "Dado não existente";
+  }
+}
 
 export default function App() {
   const [fontsLoaded] = useFonts({
     Inter_300Light,
     Inter_900Black,
   });
+  const [userName, setUserName] = useState<User>({} as User);
   const {
     control,
     handleSubmit,
@@ -26,11 +47,23 @@ export default function App() {
       name: "",
     },
   });
-  const onSubmit = (data: FormData) => console.log(data);
+  const onSubmit = (data: FormData) => {
+    axios
+      .get(`https://api.github.com/users/${data.name}`)
+      .then((response) => {
+        const { name, login, avatar_url, location } = response.data;
+        setUserName(new User(name, login, avatar_url, location));
+      })
+      .catch((error) => {
+        console.log(error);
+        alert(error.response.data);
+      });
+  };
 
   if (!fontsLoaded) {
     return;
   }
+
   return (
     <StyledView>
       <StatusBar barStyle="light-content" backgroundColor="blue" />
@@ -57,6 +90,10 @@ export default function App() {
           onPress={handleSubmit(onSubmit)}
         />
       </Form>
+      {userName.login && (
+        <Text style={{ color: "white" }}>{userName.name}</Text>
+      )}
+      <Text style={{ color: "white" }}>User name example</Text>
       <Link style={{ color: "white" }} href="/historic">
         Go to historic
       </Link>

@@ -9,6 +9,8 @@ import { Controller, useForm } from "react-hook-form";
 import { Link } from "expo-router";
 import axios from "axios";
 import { useState } from "react";
+import { Loading } from "../src/components/loading";
+import UserSearched from "../src/components/userSearched";
 
 type FormData = {
   name: string;
@@ -37,7 +39,7 @@ export default function App() {
     Inter_300Light,
     Inter_900Black,
   });
-  const [userName, setUserName] = useState<User>({} as User);
+  const [user, setUser] = useState<User>({} as User);
   const {
     control,
     handleSubmit,
@@ -52,7 +54,7 @@ export default function App() {
       .get(`https://api.github.com/users/${data.name}`)
       .then((response) => {
         const { name, login, avatar_url, location } = response.data;
-        setUserName(new User(name, login, avatar_url, location));
+        setUser(new User(name, login, avatar_url, location));
       })
       .catch((error) => {
         console.log(error);
@@ -61,7 +63,7 @@ export default function App() {
   };
 
   if (!fontsLoaded) {
-    return;
+    return <Loading />;
   }
 
   return (
@@ -83,15 +85,20 @@ export default function App() {
           )}
           name="name"
         />
-        {errors.name && <Text>This is required.</Text>}
+        {errors.name && <WarningMessage>This is required.</WarningMessage>}
         <Button
           color="green"
           title="Pesquisar"
           onPress={handleSubmit(onSubmit)}
         />
       </Form>
-      {userName.login && (
-        <Text style={{ color: "white" }}>{userName.name}</Text>
+      {user.login && (
+        <UserSearched
+          avatar_url={user.avatar_url}
+          name={user.name}
+          login={user.login}
+          location={user.location}
+        />
       )}
       <Text style={{ color: "white" }}>User name example</Text>
       <Link style={{ color: "white" }} href="/historic">
@@ -108,8 +115,8 @@ const StyledView = styled.View`
   justify-content: space-between;
   padding: 10px;
 `;
-const StyledText = styled.Text`
-  color: #ff0000;
+const WarningMessage = styled.Text`
+  color: yellow;
   font-family: "Inter_300Light";
 `;
 const Form = styled.View``;

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, StatusBar } from "react-native";
+import { StatusBar, Text } from "react-native";
 import styled from "styled-components/native";
 import {
   useFonts,
@@ -6,7 +6,7 @@ import {
   Inter_900Black,
 } from "@expo-google-fonts/inter";
 
-export default function App() {
+export default function Historic() {
   const [fontsLoaded] = useFonts({
     Inter_300Light,
     Inter_900Black,
@@ -16,17 +16,17 @@ export default function App() {
   }
   return (
     <StyledView>
-      <StyledText>Hello!</StyledText>
-      <StatusBar barStyle="light-content" translucent />
+      <Text style={{ color: "white" }}>Historic page</Text>
+      <StatusBar barStyle="light-content" backgroundColor="blue" />
     </StyledView>
   );
 }
 
 const StyledView = styled.View`
   flex: 1;
-  background-color: #ffffff;
+  background-color: black;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
 `;
 const StyledText = styled.Text`
   color: #ff0000;

@@ -1,11 +1,4 @@
-import {
-  Button,
-  ScrollView,
-  StatusBar,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
+import { Button, StatusBar, Text, TextInput, View } from "react-native";
 import styled from "styled-components/native";
 import {
   useFonts,
@@ -41,14 +34,14 @@ export default function App() {
   return (
     <StyledView>
       <StatusBar barStyle="light-content" backgroundColor="blue" />
-      <View>
+      <Form>
         <Controller
           control={control}
           rules={{
             required: true,
           }}
           render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput
+            <FormTextInput
               placeholder="Digite o nome do usuário"
               onBlur={onBlur}
               onChangeText={onChange}
@@ -58,8 +51,12 @@ export default function App() {
           name="name"
         />
         {errors.name && <Text>This is required.</Text>}
-        <Button title="Submit" onPress={handleSubmit(onSubmit)} />
-      </View>
+        <Button
+          color="green"
+          title="Pesquisar"
+          onPress={handleSubmit(onSubmit)}
+        />
+      </Form>
       <Link style={{ color: "white" }} href="/historic">
         Go to historic
       </Link>
@@ -69,12 +66,18 @@ export default function App() {
 
 const StyledView = styled.View`
   flex: 1;
-  background-color: white;
+  background-color: black;
   align-items: center;
   justify-content: space-between;
+  padding: 10px;
 `;
 const StyledText = styled.Text`
   color: #ff0000;
   font-family: "Inter_300Light";
 `;
 const Form = styled.View``;
+
+const FormTextInput = styled.TextInput`
+  border: solid 1px green;
+  background-color: white;
+`;

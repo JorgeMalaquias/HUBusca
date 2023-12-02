@@ -1,4 +1,4 @@
-import { Button, StatusBar, Text, TextInput, View } from "react-native";
+import { Button, StatusBar } from "react-native";
 import styled from "styled-components/native";
 import {
   useFonts,
@@ -8,9 +8,10 @@ import {
 import { Controller, useForm } from "react-hook-form";
 import { Link } from "expo-router";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Loading } from "../components/loading";
 import UserSearched from "../components/userSearched";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export type FormData = {
   name: string;
@@ -49,17 +50,25 @@ export default function App() {
       name: "",
     },
   });
-
-  const onSubmit = (data: FormData) => {
-    axios
-      .get(`https://api.github.com/users/${data.name}`)
-      .then((response) => {
-        const { name, login, avatar_url, location } = response.data;
-        setUser(new User(name, login, avatar_url, location));
-      })
-      .catch((error) => {
-        alert(error);
-      });
+  const onSubmit = async (data: FormData) => {
+    try {
+      const response = await axios.get(
+        `https://api.github.com/users/${data.name}`
+      );
+      const { name, login, avatar_url, location } = response.data;
+      const newUser = new User(name, login, avatar_url, location);
+      setUser(newUser);
+      const jsonValue = await AsyncStorage.getItem("users");
+      if (jsonValue && Array.isArray(JSON.parse(jsonValue))) {
+        const array: User[] = JSON.parse(jsonValue);
+        array.push(newUser);
+        await AsyncStorage.setItem("users", JSON.stringify(newUser));
+      } else {
+        await AsyncStorage.setItem("users", JSON.stringify([newUser]));
+      }
+    } catch (error) {
+      alert(error);
+    }
   };
 
   if (!fontsLoaded) {
@@ -100,13 +109,7 @@ export default function App() {
           location={user.location}
         />
       )}
-      {/* <UserSearched
-        avatar_url={"https://avatars.githubusercontent.com/u/157629?v=4"}
-        name={"example"}
-        login={"example"}
-        location={"example"}
-      /> */}
-      <Link style={{ color: "white" }} href="/historic">
+      <Link style={{ color: "white" }} href="/historicScreen">
         Go to historic
       </Link>
     </StyledView>
@@ -120,6 +123,7 @@ const StyledView = styled.View`
   justify-content: space-between;
   padding: 10px;
 `;
+
 const WarningMessage = styled.Text`
   color: yellow;
   font-family: "Inter_300Light";

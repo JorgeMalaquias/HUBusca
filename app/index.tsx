@@ -8,7 +8,7 @@ import {
 import { Controller, useForm } from "react-hook-form";
 import { Link } from "expo-router";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Loading } from "../src/components/loading";
 import UserSearched from "../src/components/userSearched";
 
@@ -49,6 +49,7 @@ export default function App() {
       name: "",
     },
   });
+
   const onSubmit = (data: FormData) => {
     axios
       .get(`https://api.github.com/users/${data.name}`)
@@ -57,8 +58,7 @@ export default function App() {
         setUser(new User(name, login, avatar_url, location));
       })
       .catch((error) => {
-        console.log(error);
-        alert(error.response.data);
+        alert(error);
       });
   };
 
@@ -100,7 +100,12 @@ export default function App() {
           location={user.location}
         />
       )}
-      <Text style={{ color: "white" }}>User name example</Text>
+      <UserSearched
+        avatar_url={"https://avatars.githubusercontent.com/u/157629?v=4"}
+        name={"example"}
+        login={"example"}
+        location={"example"}
+      />
       <Link style={{ color: "white" }} href="/historic">
         Go to historic
       </Link>

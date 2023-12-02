@@ -33,7 +33,11 @@ export default function UserSearched(props: User) {
       $windowWidth={dimensions.window.width}
       $windowHeight={dimensions.window.height}
     >
-      {/* <Image source={require(props.avatar_url)} alt="uer_photo" />*/}
+      <Image
+        style={{ width: 50, height: 50 }}
+        source={{ uri: props.avatar_url }}
+        alt="uer_photo"
+      />
       <View>
         <Info>{props.name}</Info>
         <Info>{props.login}</Info>
@@ -47,8 +51,8 @@ const Container = styled.View<{
   $windowWidth: number;
   $windowHeight: number;
 }>`
-  width: ${(props) => props.$windowWidth * 0.7};
-  height: ${(props) => props.$windowHeight * 0.15};
+  width: ${(props) => Math.floor(props.$windowWidth * 0.7)};
+  height: ${(props) => Math.floor(props.$windowHeight * 0.15)};
   background-color: green;
 `;
 

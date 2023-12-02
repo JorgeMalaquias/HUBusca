@@ -33,16 +33,16 @@ export default function UserSearched(props: User) {
       $windowWidth={dimensions.window.width}
       $windowHeight={dimensions.window.height}
     >
-      <Image
-        style={{ width: 50, height: 50 }}
-        source={{ uri: props.avatar_url }}
-        alt="uer_photo"
-      />
       <View>
-        <Info>{props.name}</Info>
-        <Info>{props.login}</Info>
-        <Info>{props.location}</Info>
+        <Info>Nome: {props.name}</Info>
+        <Info>Login: {props.login}</Info>
+        <Info>Localização: {props.location}</Info>
       </View>
+      <Image
+        style={{ width: 70, height: 70 }}
+        source={{ uri: props.avatar_url }}
+        alt="user_photo"
+      />
     </Container>
   );
 }
@@ -54,6 +54,10 @@ const Container = styled.View<{
   width: ${(props) => Math.floor(props.$windowWidth * 0.7)};
   height: ${(props) => Math.floor(props.$windowHeight * 0.15)};
   background-color: green;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 10px;
 `;
 
 const Info = styled.Text`

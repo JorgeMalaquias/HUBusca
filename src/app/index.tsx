@@ -9,14 +9,14 @@ import { Controller, useForm } from "react-hook-form";
 import { Link } from "expo-router";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Loading } from "../src/components/loading";
-import UserSearched from "../src/components/userSearched";
+import { Loading } from "../components/loading";
+import UserSearched from "../components/userSearched";
 
-type FormData = {
+export type FormData = {
   name: string;
 };
 
-class User {
+export class User {
   public name: string;
   public login: string;
   public avatar_url: string;
@@ -100,12 +100,12 @@ export default function App() {
           location={user.location}
         />
       )}
-      <UserSearched
+      {/* <UserSearched
         avatar_url={"https://avatars.githubusercontent.com/u/157629?v=4"}
         name={"example"}
         login={"example"}
         location={"example"}
-      />
+      /> */}
       <Link style={{ color: "white" }} href="/historic">
         Go to historic
       </Link>
